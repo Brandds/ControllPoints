@@ -1,0 +1,5 @@
+databaseChangeLog:
+# Seus futuros scripts de mudança do banco de dados serão listados aqui
+# Por exemplo:
+# - include:
+#     file: db/changelog/changes/001-create-initial-tables.sql
