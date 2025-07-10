@@ -1,17 +1,50 @@
 package ControllPoints.com.Config
 
+
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.servlet.config.annotation.CorsRegistry
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.web.SecurityFilterChain
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
-class WebConfig  : WebMvcConfigurer {
+@EnableWebSecurity
+class WebConfig  {
 
-    override fun addCorsMappings(registry: CorsRegistry) {
-        registry.addMapping("/**")// Aplica a configuração a todos os endpoints da API
-            .allowedOrigins("*") // Permite requisições de qualquer origem (servidor)
-            .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "HEAD", "TRACE", "CONNECT")// Métodos HTTP permitidos
-            .allowedHeaders("*") // Permite todos os cabeçalhos na requisição
-            .allowCredentials(true)// Importante se você usa cookies ou sessões (token)
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http
+            .cors { } // Habilita CORS usando o bean 'corsConfigurationSource'
+            .csrf { it.disable() }
+            .authorizeHttpRequests { auth ->
+                auth
+                    .requestMatchers("/**").permitAll() // Sintaxe correta e padrão
+                    .anyRequest().authenticated()
+            }
+
+        return http.build()
     }
+    @Bean
+    fun corsConfigurationSource(): CorsConfigurationSource {
+
+        val configuration = CorsConfiguration()
+        configuration.allowedOrigins = listOf(
+            "http://localhost:8100",  // Para `ionic serve` ou outros servidores web locais
+            "http://localhost",       // Para o Android Emulator/WebView
+            "capacitor://localhost"   // Para builds nativas com Capacitor
+        ) // Origens permitidas
+
+        configuration.allowedMethods = listOf("GET", "POST", "PUT", "DELETE", "OPTIONS")
+        configuration.allowedHeaders = listOf("*")
+        configuration.allowCredentials = true
+
+        val source = UrlBasedCorsConfigurationSource()
+        source.registerCorsConfiguration("/**", configuration) // Aplica a configuração a todos os paths
+
+        return source
+    }
+
 }
