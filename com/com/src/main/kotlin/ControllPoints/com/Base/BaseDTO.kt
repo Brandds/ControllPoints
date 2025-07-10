@@ -1,5 +1,5 @@
 package ControllPoints.com.Base
 
-class BaseDTO (
+data class BaseDTO (
     var id: Long? = null,
 )

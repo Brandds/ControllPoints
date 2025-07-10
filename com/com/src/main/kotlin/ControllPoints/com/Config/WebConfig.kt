@@ -1,6 +1,7 @@
 package ControllPoints.com.Config
 
 
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -12,7 +13,10 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
 @EnableWebSecurity
-class WebConfig  {
+class WebConfig(
+    @Value("\${meu-app.links.localhost}") private val linkLocalhost: String
+)  {
+
 
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
@@ -32,7 +36,7 @@ class WebConfig  {
 
         val configuration = CorsConfiguration()
         configuration.allowedOrigins = listOf(
-            "http://localhost:8100",  // Para `ionic serve` ou outros servidores web locais
+            linkLocalhost,  // Para `ionic serve` ou outros servidores web locais
             "http://localhost",       // Para o Android Emulator/WebView
             "capacitor://localhost"   // Para builds nativas com Capacitor
         ) // Origens permitidas
