@@ -2,6 +2,7 @@ package ControllPoints.com.Config
 
 
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -21,12 +22,21 @@ class WebConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            .cors { } // Habilita CORS usando o bean 'corsConfigurationSource'
-            .csrf { it.disable() }
+            // 1. Autorização de Requisições
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/**").permitAll() // Sintaxe correta e padrão
+                    // Libera o acesso ao console do H2
+                    .requestMatchers(PathRequest.toH2Console()).permitAll()
+                    // Exige autenticação para todas as outras requisições
                     .anyRequest().authenticated()
+            }
+            // 2. Desabilitar CSRF apenas para o H2 Console (mais seguro que desabilitar globalmente)
+            .csrf { csrf ->
+                csrf.ignoringRequestMatchers(PathRequest.toH2Console())
+            }
+            // 3. Permitir que o H2 Console seja renderizado em um frame
+            .headers { headers ->
+                headers.frameOptions { it.sameOrigin() }
             }
 
         return http.build()
