@@ -2,6 +2,8 @@ package ControllPoints.com.model
 
 import ControllPoints.com.base.BaseEntity
 import jakarta.persistence.Column
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.MappedSuperclass
 
@@ -18,7 +20,8 @@ abstract class Usuario (
     @Column(unique=true)
     val login: String,
 
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa_id")
     var empresa: Empresa,
 
     var ativo: Boolean,

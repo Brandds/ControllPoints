@@ -1,5 +1,8 @@
 package ControllPoints.com.model
 
+import jakarta.persistence.Entity
+
+@Entity
 class Administrador(
     nome:String,
     senha: String,

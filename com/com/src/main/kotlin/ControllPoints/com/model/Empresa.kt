@@ -1,8 +1,32 @@
 package ControllPoints.com.model
 
 import ControllPoints.com.base.BaseEntity
+import ControllPoints.com.model.Endereco.Endereco
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinColumns
+import jakarta.persistence.ManyToOne
+import jakarta.persistence.OneToMany
+import jakarta.persistence.OneToOne
 
 @Entity
-class Empresa: BaseEntity() {
+class Empresa (
+    val cnpj: String,
+    val razaoSocial : String,
+    val nomeFantasia : String,
+
+    @OneToOne(cascade = [CascadeType.ALL])
+    @JoinColumn(name = "endereco_id")
+    val endereco : Endereco,
+    val telefone : String,
+    val dataCadastro : String,
+
+    @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val listaUsuario : List<Usuario> = listOf<Usuario>(),
+
+    @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    val listaCargo : List<Cargo> = listOf<Cargo>()
+): BaseEntity() {
 }
