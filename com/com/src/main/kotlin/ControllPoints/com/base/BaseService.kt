@@ -8,4 +8,5 @@ interface BaseService<T, DTO> {
     fun salvar(dto: DTO): DTO
     fun deletarLogicamente(id: Long): Boolean
     fun atualizar(id: Long, dto:DTO): DTO
+    fun recuperarPorId(id: Long):T
 }

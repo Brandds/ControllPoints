@@ -21,5 +21,5 @@ abstract class BaseEntity(
     @UpdateTimestamp
     var updatedAt: LocalDateTime? = null,
 
-    val deleteAt:  LocalDateTime? = null
+    var deleteAt:  LocalDateTime? = null
 )

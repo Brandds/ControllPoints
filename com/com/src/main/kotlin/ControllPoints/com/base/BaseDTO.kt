@@ -1,5 +1,6 @@
 package ControllPoints.com.base
 
-data class BaseDTO (
+open data class BaseDTO (
     var id: Long? = null,
 )
+
