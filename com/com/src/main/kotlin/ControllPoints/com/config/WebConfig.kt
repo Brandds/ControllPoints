@@ -1,4 +1,4 @@
-package ControllPoints.com.Config
+package ControllPoints.com.config
 
 
 import org.springframework.beans.factory.annotation.Value

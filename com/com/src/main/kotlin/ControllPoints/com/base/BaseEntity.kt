@@ -1,10 +1,11 @@
-package ControllPoints.com.Base
+package ControllPoints.com.base
 
-import jakarta.persistence.Entity
 import jakarta.persistence.GeneratedValue
 import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import jakarta.persistence.MappedSuperclass
+import org.hibernate.annotations.CreationTimestamp
+import org.hibernate.annotations.UpdateTimestamp
 import java.time.LocalDateTime
 
 
@@ -14,6 +15,11 @@ abstract class BaseEntity(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     val id: Long? = null,
 
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-    var updatedAt: LocalDateTime = LocalDateTime.now()
+    @CreationTimestamp
+    val createdAt: LocalDateTime? = null,
+
+    @UpdateTimestamp
+    var updatedAt: LocalDateTime? = null,
+
+    val deleteAt:  LocalDateTime? = null
 )
