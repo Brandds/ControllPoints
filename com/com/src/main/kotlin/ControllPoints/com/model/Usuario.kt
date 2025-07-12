@@ -29,8 +29,7 @@ abstract class Usuario (
     @Column(unique=true)
     val cpf: String,
 
-    @Column(nullable = true)
-    val telefone: String?
+    var telefone: String?
 
 ) : BaseEntity() {
 
