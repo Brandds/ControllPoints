@@ -1,9 +1,12 @@
 package ControllPoints.com.model
 
 import ControllPoints.com.base.BaseEntity
+import jakarta.persistence.CascadeType
 import jakarta.persistence.Column
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
+import jakarta.persistence.JoinTable
+import jakarta.persistence.ManyToMany
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.MappedSuperclass
 
@@ -29,7 +32,13 @@ abstract class Usuario (
     @Column(unique=true)
     val cpf: String,
 
-    var telefone: String?
+    var telefone: String?,
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "users_roles",
+        joinColumns =  [JoinColumn(name = "user_id")],
+        inverseJoinColumns = [JoinColumn(name= "role_id")])
+    val listaRole : Set<Role> = mutableSetOf()
 
 ) : BaseEntity(id) {
 

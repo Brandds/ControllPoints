@@ -1,7 +1,7 @@
 package ControllPoints.com.model
 
 import ControllPoints.com.base.BaseEntity
-import ControllPoints.com.model.Endereco.Endereco
+import ControllPoints.com.model.Endereco
 import jakarta.persistence.CascadeType
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
