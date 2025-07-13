@@ -24,9 +24,9 @@ class Empresa (
     val dataCadastro : String,
 
     @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val listaUsuario : List<Usuario> = listOf<Usuario>(),
+    val listaColaborador: List<Colaborador> = listOf<Colaborador>(),
 
-    @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val listaCargo : List<Cargo> = listOf<Cargo>()
+//    @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+//    val listaCargo : List<Cargo> = listOf<Cargo>()
 ): BaseEntity() {
 }

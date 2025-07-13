@@ -1,5 +1,6 @@
 package ControllPoints.com.service
 
+import ControllPoints.com.Mapper.toDTO
 import ControllPoints.com.base.BaseServiceImpl
 import ControllPoints.com.dto.ColaboradorDTO
 import ControllPoints.com.model.Colaborador
@@ -19,7 +20,6 @@ class ColaboradorService(
 
     override fun mapToDTO(entity: Colaborador): ColaboradorDTO {
         return ColaboradorDTO(
-            id = entity.id,
             nome = entity.nome,
             email = entity.email,
             login = entity.login,
@@ -28,24 +28,29 @@ class ColaboradorService(
             ativo = entity.ativo,
             empresaId = entity.empresa.id!!,
             cargoId = entity.cargo.id!!,
-            horarioTrabalhoId = entity.horarioTrabalho?.id,
+            horarioTrabalhoDTO = entity.horarioTrabalho.toDTO(),
             valorHora = entity.valorHora,
             salarioBruto = entity.salarioBruto,
             dataContratacao = entity.dataContratacao,
-            dataDesligamento = entity.dataDesligamento
+            dataDesligamento = entity.dataDesligamento,
+            id = entity.id,
+            senha = entity.senha
         )
     }
 
     override fun mapToEntity(dto: ColaboradorDTO): Colaborador {
         val empresa = empresaService.recuperarPorId(dto.empresaId)
         val cargo = cargoService.recuperarPorId(dto.cargoId)
-        val hTrabalho = horarioTrabalhoService.recuperarPorId(dto.horarioTrabalhoId)
+        val horarioTrabalhoId = dto.horarioTrabalhoDTO.id
+            ?: throw IllegalArgumentException("O ID do Horário de Trabalho não pode ser nulo.")
+
+        val hTrabalho = horarioTrabalhoService.recuperarPorId(horarioTrabalhoId)
         return Colaborador(
             id = dto.id,
             nome = dto.nome,
             email = dto.email,
             login = dto.login,
-            senha = dto.senha
+            senha = dto.senha,
             cpf = dto.cpf,
             telefone = dto.telefone!!,
             ativo = dto.ativo,

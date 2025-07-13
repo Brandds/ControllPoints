@@ -1,4 +1,6 @@
 package ControllPoints.com.dto
 
-data class HorarioTrabalhoDTO {
+import ControllPoints.com.base.BaseDTO
+
+class HorarioTrabalhoDTO(id: Long?) : BaseDTO() {
 }

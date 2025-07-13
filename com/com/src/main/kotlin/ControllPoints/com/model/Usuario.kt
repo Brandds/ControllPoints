@@ -9,7 +9,7 @@ import jakarta.persistence.MappedSuperclass
 
 @MappedSuperclass
 abstract class Usuario (
-
+    id : Long?,
     val nome: String,
 
     var senha: String,
@@ -31,6 +31,6 @@ abstract class Usuario (
 
     var telefone: String?
 
-) : BaseEntity() {
+) : BaseEntity(id) {
 
 }

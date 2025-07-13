@@ -1,11 +1,15 @@
 package ControllPoints.com.model
 
+import ControllPoints.com.dto.ColaboradorDTO
 import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.JoinColumn
 import jakarta.persistence.ManyToOne
 import java.time.LocalDateTime
 
 @Entity
 class Colaborador(
+    id: Long?,
     nome: String,
     senha: String,
     email: String,
@@ -22,12 +26,13 @@ class Colaborador(
 
     var salarioBruto: Double,
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "horario_trabalho_id")
     var horarioTrabalho: HorarioTrabalho,
 
     var dataContratacao: LocalDateTime,
 
     var dataDesligamento: LocalDateTime?
 
-) : Usuario(nome, senha, email, login, empresa, ativo, cpf, telefone) {
+) : Usuario(id,nome, senha, email, login, empresa, ativo, cpf, telefone) {
 }

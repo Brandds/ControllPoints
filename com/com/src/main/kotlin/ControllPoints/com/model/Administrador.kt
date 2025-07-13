@@ -4,6 +4,7 @@ import jakarta.persistence.Entity
 
 @Entity
 class Administrador(
+    id : Long,
     nome:String,
     senha: String,
     email: String,
@@ -13,5 +14,5 @@ class Administrador(
     cpf: String,
     telefone:String?
 
-): Usuario(nome,senha,email,login,empresa,ativo, cpf, telefone) {
+): Usuario(id,nome,senha,email,login,empresa,ativo, cpf, telefone) {
 }

@@ -1,4 +1,8 @@
 package ControllPoints.com.dto
 
-data class EmpresaDTO {
+import ControllPoints.com.base.BaseDTO
+
+class EmpresaDTO(
+    id :Long
+):  BaseDTO(id){
 }
