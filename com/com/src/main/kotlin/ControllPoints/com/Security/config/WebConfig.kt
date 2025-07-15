@@ -2,6 +2,8 @@ package ControllPoints.com.Security.config
 
 
 import ControllPoints.com.Security.Jwt.UserAuthenticationFilter
+import io.swagger.v3.oas.annotations.OpenAPIDefinition
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
@@ -18,9 +20,27 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+import io.swagger.v3.oas.annotations.info.Info
+import io.swagger.v3.oas.annotations.security.SecurityRequirement
+import io.swagger.v3.oas.annotations.security.SecurityScheme
+
 
 @Configuration
 @EnableWebSecurity
+@OpenAPIDefinition(
+    info = Info(
+        title = "Controll Points API",
+        version = "1.0",
+        description = "Documentação dos endpoints da API do sistema de ponto."
+    ),
+    security = [SecurityRequirement(name = "bearerAuth")]
+)
+@SecurityScheme(
+    name = "bearerAuth", // Um nome de referência para este esquema
+    type = SecuritySchemeType.HTTP, // O tipo de esquema é HTTP
+    scheme = "bearer", // O protocolo específico é o "Bearer Token"
+    bearerFormat = "JWT" // Um hint para o formato do token
+)
 class SecurityConfig(
     private val userAuthenticationFilter: UserAuthenticationFilter,
     @Value("\${meu-app.links.localhost}") private val linkLocalhost: String
@@ -29,14 +49,19 @@ class SecurityConfig(
 
     // 2. Definimos as constantes com os endpoints
     companion object {
-        private val ENDPOINTS_PUBLICOS = arrayOf(
+         val ENDPOINTS_PUBLICOS = arrayOf(
             "/auth/login", // Ajustei para o seu provável endpoint de login
-            "/colaboradores"
-        )
-        private val ENDPOINTS_ADMIN = arrayOf(
+            "/colaboradores",
+             "/swagger-ui.html",
+             "/swagger-ui/**",
+             "/v3/api-docs/**",
+             "/swagger-resources/**",
+             "/h2-console/**"
+         )
+         val ENDPOINTS_ADMIN = arrayOf(
             "/users/test/administrator"
         )
-        private val ENDPOINTS_CLIENTE = arrayOf(
+         val ENDPOINTS_CLIENTE = arrayOf(
             "/users/test/customer"
         )
     }
@@ -44,21 +69,29 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            // 3. Desabilita CSRF e configura a sessão para STATELESS (essencial para JWT)
-            .csrf { it.disable() }
+            // ✅ 2. Adicione a configuração de Headers para permitir o frame do H2 Console
+            .headers { headers ->
+                headers.frameOptions { it.sameOrigin() }
+            }
+            // Sua configuração de CSRF pode ser melhorada para ignorar o H2 também
+            .csrf { csrf ->
+                csrf.ignoringRequestMatchers(PathRequest.toH2Console()) // Ignora CSRF para o console
+                    .ignoringRequestMatchers(*ENDPOINTS_PUBLICOS) // E para os endpoints públicos
+            }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
-            // 4. Configura a autorização das requisições HTTP
             .authorizeHttpRequests { auth ->
                 auth
+                    // ✅ 3. Adicione a permissão para acessar o console do H2
+                    .requestMatchers(PathRequest.toH2Console()).permitAll()
+
+                    // Suas outras regras de permissão...
                     .requestMatchers(*ENDPOINTS_PUBLICOS).permitAll()
                     .requestMatchers(*ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
                     .requestMatchers(*ENDPOINTS_CLIENTE).hasRole("CUSTOMER")
-                    // .requestMatchers("/users/test").authenticated() // Se você tiver endpoints que só precisam de autenticação simples
-                    .anyRequest().authenticated() // Mudei de denyAll para authenticated, que é mais comum. Se quiser negar, use .denyAll()
+                    .anyRequest().authenticated()
             }
-            // 5. Adiciona seu filtro de JWT antes do filtro padrão do Spring
             .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()

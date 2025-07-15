@@ -1,6 +1,5 @@
-package ControllPoints.com.service
+package ControllPoints.com.service.ServiceImpl
 
-import ControllPoints.com.base.BaseService
 import ControllPoints.com.base.BaseServiceImpl
 import ControllPoints.com.dto.HorarioTrabalhoDTO
 import ControllPoints.com.model.HorarioTrabalho
@@ -8,7 +7,7 @@ import ControllPoints.com.repository.HorarioTrabalhoRepository
 import org.springframework.stereotype.Service
 
 @Service
-class HorarioTrabalhoService(
+class HorarioTrabalhoServiceImpl(
     private val repository: HorarioTrabalhoRepository
 ) : BaseServiceImpl<HorarioTrabalho, HorarioTrabalhoDTO>(repository) {
 

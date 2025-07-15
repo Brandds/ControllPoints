@@ -10,6 +10,7 @@ import jakarta.persistence.JoinColumns
 import jakarta.persistence.ManyToOne
 import jakarta.persistence.OneToMany
 import jakarta.persistence.OneToOne
+import java.time.LocalDate
 
 @Entity
 class Empresa (
@@ -21,7 +22,7 @@ class Empresa (
     @JoinColumn(name = "endereco_id")
     val endereco : Endereco,
     val telefone : String,
-    val dataCadastro : String,
+    val dataCadastro : LocalDate,
 
     @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val listaColaborador: List<Colaborador> = listOf<Colaborador>(),

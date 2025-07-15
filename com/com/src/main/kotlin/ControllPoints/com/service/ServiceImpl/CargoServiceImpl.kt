@@ -1,4 +1,4 @@
-package ControllPoints.com.service
+package ControllPoints.com.service.ServiceImpl
 
 import ControllPoints.com.base.BaseService
 import ControllPoints.com.dto.CargoDTO
@@ -6,7 +6,7 @@ import ControllPoints.com.model.Cargo
 import org.springframework.stereotype.Service
 
 @Service
-class CargoService : BaseService<Cargo, CargoDTO>{
+class CargoServiceImpl : BaseService<Cargo, CargoDTO> {
     override fun listarNaoExcluidos(): List<CargoDTO> {
         TODO("Not yet implemented")
     }

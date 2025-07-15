@@ -1,6 +1,6 @@
 package ControllPoints.com.Security.Jwt
 
-import ControllPoints.com.Security.config.WebConfig
+import ControllPoints.com.Security.config.SecurityConfig
 import ControllPoints.com.Security.service.UserDetailsImpl
 import ControllPoints.com.repository.ColaboradorRepository
 import jakarta.servlet.FilterChain
@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Component
+import org.springframework.util.AntPathMatcher
 import org.springframework.web.filter.OncePerRequestFilter
 import java.io.IOException
 
@@ -18,7 +19,7 @@ class UserAuthenticationFilter(
     private val jwtTokenService: JwtTokenService,
     private val colaboradorRepository: ColaboradorRepository
 ) : OncePerRequestFilter() {
-
+    private val pathMatcher = AntPathMatcher()
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(
         request: HttpServletRequest,
@@ -58,6 +59,8 @@ class UserAuthenticationFilter(
     }
 
     private fun checkIfEndpointIsNotPublic(request: HttpServletRequest): Boolean {
-        return request.requestURI !in WebConfig.ENDPOINTS_PUBLICOS
+        return SecurityConfig.ENDPOINTS_PUBLICOS.none { path ->
+            pathMatcher.match(path, request.requestURI)
+        }
     }
 }
