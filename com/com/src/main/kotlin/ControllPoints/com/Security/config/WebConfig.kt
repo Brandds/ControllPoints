@@ -55,6 +55,7 @@ class SecurityConfig(
          val ENDPOINTS_PUBLICOS = arrayOf(
              "/auth/login",
              "/colaboradores",
+             "/testar-senha",
              // Endpoints do Swagger/OpenAPI
              "/swagger-ui.html",
              "/swagger-ui/**",
