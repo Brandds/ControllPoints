@@ -2,6 +2,7 @@ package ControllPoints.com.Security.config
 
 
 import ControllPoints.com.Security.Jwt.UserAuthenticationFilter
+import ControllPoints.com.Security.exception.CustomAuthenticationEntryPoint
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import org.springframework.beans.factory.annotation.Value
@@ -23,6 +24,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 import io.swagger.v3.oas.annotations.info.Info
 import io.swagger.v3.oas.annotations.security.SecurityRequirement
 import io.swagger.v3.oas.annotations.security.SecurityScheme
+import org.springframework.http.HttpMethod
 
 
 @Configuration
@@ -43,6 +45,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme
 )
 class SecurityConfig(
     private val userAuthenticationFilter: UserAuthenticationFilter,
+    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
     @Value("\${meu-app.links.localhost}") private val linkLocalhost: String
 
 ) {
@@ -50,12 +53,14 @@ class SecurityConfig(
     // 2. Definimos as constantes com os endpoints
     companion object {
          val ENDPOINTS_PUBLICOS = arrayOf(
-            "/auth/login", // Ajustei para o seu provável endpoint de login
-            "/colaboradores",
+             "/auth/login",
+             "/colaboradores",
+             // Endpoints do Swagger/OpenAPI
              "/swagger-ui.html",
              "/swagger-ui/**",
              "/v3/api-docs/**",
              "/swagger-resources/**",
+             // Endpoint do H2
              "/h2-console/**"
          )
          val ENDPOINTS_ADMIN = arrayOf(
@@ -69,28 +74,28 @@ class SecurityConfig(
     @Bean
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
-            // ✅ 2. Adicione a configuração de Headers para permitir o frame do H2 Console
+            .cors { }
             .headers { headers ->
                 headers.frameOptions { it.sameOrigin() }
             }
-            // Sua configuração de CSRF pode ser melhorada para ignorar o H2 também
-            .csrf { csrf ->
-                csrf.ignoringRequestMatchers(PathRequest.toH2Console()) // Ignora CSRF para o console
-                    .ignoringRequestMatchers(*ENDPOINTS_PUBLICOS) // E para os endpoints públicos
-            }
+            .csrf { it.disable() }
             .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .authorizeHttpRequests { auth ->
                 auth
-                    // ✅ 3. Adicione a permissão para acessar o console do H2
-                    .requestMatchers(PathRequest.toH2Console()).permitAll()
+                    // ✅ A SOLUÇÃO: Permita todas as requisições OPTIONS (pre-flight do CORS)
+                    .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                    // Suas outras regras de permissão...
+                    // O resto das suas regras vem depois...
+                    .requestMatchers(PathRequest.toH2Console()).permitAll()
                     .requestMatchers(*ENDPOINTS_PUBLICOS).permitAll()
                     .requestMatchers(*ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
                     .requestMatchers(*ENDPOINTS_CLIENTE).hasRole("CUSTOMER")
                     .anyRequest().authenticated()
+            }
+            .exceptionHandling {
+                it.authenticationEntryPoint(customAuthenticationEntryPoint)
             }
             .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 

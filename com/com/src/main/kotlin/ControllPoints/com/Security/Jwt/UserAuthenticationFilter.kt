@@ -33,7 +33,7 @@ class UserAuthenticationFilter(
             // Se o token existir, processa a autenticação
             token?.let {
                 val subject = jwtTokenService.getSubjectFromToken(it)
-                val user = colaboradorRepository.findByCpf(subject)
+                val user = colaboradorRepository.findByEmail(subject)
                     .orElseThrow { RuntimeException("Usuário não encontrado a partir do token.") }
 
                 val userDetails = UserDetailsImpl(user)

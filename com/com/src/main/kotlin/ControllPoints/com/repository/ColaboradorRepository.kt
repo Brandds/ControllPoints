@@ -8,5 +8,5 @@ import java.util.Optional
 
 @Repository
 interface ColaboradorRepository : BaseRepository<Colaborador, Long>, JpaRepository<Colaborador, Long> {
-    fun  findByCpf(cpf : String) : Optional<Colaborador>;
+    fun  findByEmail(cpf : String) : Optional<Colaborador>;
 }

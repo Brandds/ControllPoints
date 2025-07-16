@@ -13,10 +13,13 @@ class UserDetailsServiceImpl(
     val colaboradorRepository: ColaboradorRepository
 ) : UserDetailsService {
     @Throws(UsernameNotFoundException::class)
-    override fun loadUserByUsername(username: String): UserDetails {
-        val colaborador = colaboradorRepository.findByCpf(username)
-            .orElseThrow { UsernameNotFoundException("Usuário com email $username não encontrado.") }
+    override fun loadUserByUsername(email: String): UserDetails {
+        // Busca um Colaborador pelo email (que é o 'username' no login)
+        val colaborador = colaboradorRepository.findByEmail(email)
+            // Se não encontrar, lança a exceção que o Spring Security espera.
+            .orElseThrow { UsernameNotFoundException("Usuário com e-mail '$email' não encontrado.") }
 
+        // Se encontrou, retorna a implementação de UserDetails.
         return UserDetailsImpl(colaborador)
     }
 }

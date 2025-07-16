@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -28,6 +29,18 @@ data class FieldValidationError(
 class GlobalExceptionHandler {
 
     private val logger = LoggerFactory.getLogger(GlobalExceptionHandler::class.java)
+
+    // Excpetion para Não autorizado 401
+    @ExceptionHandler(BadCredentialsException::class)
+    fun handleBadCredentials(ex: BadCredentialsException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        val error = ErrorResponse(
+            status = HttpStatus.UNAUTHORIZED.value(),
+            error = "Unauthorized",
+            message = "Credenciais inválidas. Verifique o e-mail e a senha.",
+            path = request.requestURI
+        )
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error)
+    }
 
     @ExceptionHandler(NoSuchElementException::class)
     fun handleNotFound(ex: NoSuchElementException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
