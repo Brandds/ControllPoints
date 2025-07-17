@@ -4,7 +4,7 @@ import ControllPoints.com.base.BaseDTO
 import java.time.LocalDateTime
 
 class ColaboradorDTO(
-    id : Long?,
+    id : Long? = null,
     val nome: String,
     val email: String,
     val login: String,
@@ -13,8 +13,8 @@ class ColaboradorDTO(
 
     val ativo: Boolean,
 
-    val empresaId: Long,
-    val cargoId: Long,
+    var empresaDTO: EmpresaDTO,
+    val cargoDTO: CargoDTO,
     val horarioTrabalhoDTO: HorarioTrabalhoDTO,
 
     var valorHora: Double,
@@ -22,5 +22,5 @@ class ColaboradorDTO(
 
     val dataContratacao: LocalDateTime,
     val dataDesligamento: LocalDateTime? = null,
-    val senha : String
+    var senha : String
 ) : BaseDTO(id){}

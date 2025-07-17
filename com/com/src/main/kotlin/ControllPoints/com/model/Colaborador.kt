@@ -1,6 +1,5 @@
 package ControllPoints.com.model
 
-import ControllPoints.com.dto.ColaboradorDTO
 import jakarta.persistence.Entity
 import jakarta.persistence.FetchType
 import jakarta.persistence.JoinColumn
@@ -9,15 +8,15 @@ import java.time.LocalDateTime
 
 @Entity
 class Colaborador(
-    id: Long?,
+    id: Long? = null,
     nome: String,
     senha: String,
     email: String,
     login: String,
     empresa: Empresa,
-    ativo : Boolean,
-    cpf : String,
-    telefone: String,
+    ativo: Boolean,
+    cpf: String,
+    telefone: String?,
 
     @ManyToOne(optional = false)
     var cargo: Cargo,

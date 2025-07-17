@@ -4,4 +4,6 @@ import ControllPoints.com.base.BaseEntity
 import jakarta.persistence.Entity
 
 @Entity
-class Endereco () : BaseEntity(){}
+class Endereco (
+    id : Long?
+) : BaseEntity(id){}

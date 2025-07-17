@@ -4,5 +4,8 @@ import ControllPoints.com.base.BaseEntity
 import jakarta.persistence.Entity
 
 @Entity
-class Cargo: BaseEntity() {
+class Cargo(
+    id: Long? = null,
+    val nome :String
+): BaseEntity(id) {
 }

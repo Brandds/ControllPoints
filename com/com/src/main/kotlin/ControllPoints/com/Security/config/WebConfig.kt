@@ -55,7 +55,7 @@ class SecurityConfig(
          val ENDPOINTS_PUBLICOS = arrayOf(
              "/auth/login",
              "/colaboradores",
-             "/testar-senha",
+             "/empresa/cadastrar",
              // Endpoints do Swagger/OpenAPI
              "/swagger-ui.html",
              "/swagger-ui/**",
@@ -85,10 +85,8 @@ class SecurityConfig(
             }
             .authorizeHttpRequests { auth ->
                 auth
-                    // ✅ A SOLUÇÃO: Permita todas as requisições OPTIONS (pre-flight do CORS)
                     .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                    // O resto das suas regras vem depois...
                     .requestMatchers(PathRequest.toH2Console()).permitAll()
                     .requestMatchers(*ENDPOINTS_PUBLICOS).permitAll()
                     .requestMatchers(*ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")

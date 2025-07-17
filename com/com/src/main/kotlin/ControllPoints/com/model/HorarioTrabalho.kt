@@ -5,5 +5,7 @@ import jakarta.persistence.Entity
 
 
 @Entity
-class HorarioTrabalho: BaseEntity() {
+class HorarioTrabalho(
+    id : Long? = null
+): BaseEntity(id) {
 }

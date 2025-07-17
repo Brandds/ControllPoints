@@ -20,7 +20,7 @@ class Empresa (
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "endereco_id")
-    val endereco : Endereco,
+    val endereco : Endereco? = null,
     val telefone : String,
     val dataCadastro : LocalDate,
 
