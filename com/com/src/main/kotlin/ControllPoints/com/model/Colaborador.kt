@@ -12,7 +12,7 @@ class Colaborador(
     nome: String,
     senha: String,
     email: String,
-    login: String,
+    login: String? = null,
     empresa: Empresa,
     ativo: Boolean,
     cpf: String,

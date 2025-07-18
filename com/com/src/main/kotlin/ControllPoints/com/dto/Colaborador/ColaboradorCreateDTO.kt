@@ -1,26 +1,22 @@
-package ControllPoints.com.dto
+package ControllPoints.com.dto.Colaborador
 
-import ControllPoints.com.base.BaseDTO
+import ControllPoints.com.dto.CargoDTO
+import ControllPoints.com.dto.EmpresaDTO
+import ControllPoints.com.dto.HorarioTrabalhoDTO
 import java.time.LocalDateTime
 
-class ColaboradorDTO(
-    id: Long? = null,
+class ColaboradorCreateDTO(
     val nome: String,
     val email: String,
-    val login: String?,
     val cpf: String,
     var telefone: String? = null,
-
-    val ativo: Boolean,
-
     var empresaDTO: EmpresaDTO? = null,
-    val cargoDTO: CargoDTO,
-    val horarioTrabalhoDTO: HorarioTrabalhoDTO,
-
     var valorHora: Double,
     var salarioBruto: Double,
-
     val dataContratacao: LocalDateTime,
     val dataDesligamento: LocalDateTime? = null,
-    var senha: String
-) : BaseDTO(id){}
+    var senha : String,
+    val cargoDTO : CargoDTO,
+    val horarioTrabalhoDTO: HorarioTrabalhoDTO
+    ) {
+}

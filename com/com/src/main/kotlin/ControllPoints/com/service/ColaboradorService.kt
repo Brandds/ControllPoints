@@ -1,8 +1,8 @@
 package ControllPoints.com.service
 
-import ControllPoints.com.base.BaseService
+import ControllPoints.com.dto.Colaborador.ColaboradorCreateDTO
 import ControllPoints.com.dto.ColaboradorDTO
-import ControllPoints.com.model.Colaborador
 
 interface ColaboradorService{
+    fun cadastrar(dto : ColaboradorCreateDTO) : ColaboradorDTO
 }

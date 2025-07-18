@@ -2,7 +2,9 @@ package ControllPoints.com.service.ServiceImpl
 
 import ControllPoints.com.mapper.toDTO
 import ControllPoints.com.base.BaseServiceImpl
+import ControllPoints.com.dto.Colaborador.ColaboradorCreateDTO
 import ControllPoints.com.dto.ColaboradorDTO
+import ControllPoints.com.exception.RecursoJaExistenteException
 import ControllPoints.com.mapper.toEntityCreate
 import ControllPoints.com.model.Colaborador
 import ControllPoints.com.repository.ColaboradorRepository
@@ -12,18 +14,21 @@ import org.springframework.stereotype.Service
 
 @Service
 class ColaboradorServiceImpl(
-    private val repository: ColaboradorRepository,
+    private val repositoryColaborador: ColaboradorRepository,
     private val empresaService: EmpresaServiceImpl,
     private val cargoService: CargoServiceImpl,
     private val horarioTrabalhoService: HorarioTrabalhoServiceImpl,
     private val passwordEncoder: PasswordEncoder
-) : BaseServiceImpl<Colaborador, ColaboradorDTO>(repository), ColaboradorService {
+) : BaseServiceImpl<Colaborador, ColaboradorDTO>(repositoryColaborador), ColaboradorService {
 
     override fun salvar(dto: ColaboradorDTO): ColaboradorDTO {
-        val senhaHasheada = passwordEncoder.encode(dto.senha);
-        dto.senha = senhaHasheada;
-        val newEntity = dto.toEntityCreate();
-        return super.salvar(dto)
+//        val senhaHasheada = passwordEncoder.encode(dto.senha);
+//        dto.senha = senhaHasheada;
+//        val newEntity = dto.toEntityCreate();
+//        repositoryColaborador.save(newEntity);
+//        return newEntity.toDTO();
+        throw NotImplementedError("Este método deve ser implementado pelo serviço concreto.")
+
     }
 
     override fun mapToDTO(entity: Colaborador): ColaboradorDTO {
@@ -47,7 +52,7 @@ class ColaboradorServiceImpl(
     }
 
     override fun mapToEntity(dto: ColaboradorDTO): Colaborador {
-        val empresaId = requireNotNull(dto.empresaDTO.id) { "ID da empresa não pode ser nulo" }
+        val empresaId = requireNotNull(dto.empresaDTO?.id) { "ID da empresa não pode ser nulo" }
         val empresa = empresaService.recuperarPorId(empresaId);
         val cargoId = requireNotNull(dto.cargoDTO.id) { "ID do cargo não pode ser nulo" }
         val cargo = cargoService.recuperarPorId(cargoId);
@@ -78,5 +83,21 @@ class ColaboradorServiceImpl(
 
     override fun antesDeAtualizar(entity: Colaborador, dto: ColaboradorDTO): Colaborador {
         TODO("Not yet implemented")
+    }
+
+    override fun cadastrar(dto: ColaboradorCreateDTO): ColaboradorDTO {
+        if(existColaborador(dto.email))
+            throw RecursoJaExistenteException("O e-mail '${dto.email}' já está em uso.")
+        val newEntityColaborador = dto.toEntityCreate();
+        repositoryColaborador.save(newEntityColaborador)
+
+        return newEntityColaborador.toDTO();
+    }
+
+    private fun existColaborador(email : String) : Boolean {
+        val colaborador = repositoryColaborador.findByEmail(email);
+        if(colaborador.isPresent) return true;
+
+        return false;
     }
 }

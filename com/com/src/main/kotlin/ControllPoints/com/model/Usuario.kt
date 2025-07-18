@@ -21,7 +21,7 @@ abstract class Usuario (
     var email: String,
 
     @Column(unique=true)
-    val login: String,
+    val login: String?,
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "empresa_id")

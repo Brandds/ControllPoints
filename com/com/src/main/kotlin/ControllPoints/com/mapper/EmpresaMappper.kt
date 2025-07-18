@@ -10,7 +10,9 @@ fun  EmpresaDTO.toEntityCreate() : Empresa {
         razaoSocial = this.razaoSocial,
         nomeFantasia = this.nomeFantasia,
         telefone = this.telefone,
-        dataCadastro = LocalDate.now()
+        dataCadastro = LocalDate.now(),
+        senha =  this.senha,
+        email = this.email
     )
 }
 
@@ -22,6 +24,8 @@ fun Empresa.toDTO() : EmpresaDTO {
         nomeFantasia = this.nomeFantasia,
         telefone = this.telefone,
         dataCadastro = this.dataCadastro,
+        senha = "",
+        email = this.email
     )
 }
 
@@ -31,6 +35,8 @@ fun EmpresaDTO.toEntity() : Empresa {
         razaoSocial = this.razaoSocial,
         nomeFantasia = this.nomeFantasia,
         telefone = this.telefone,
-        dataCadastro = this.dataCadastro
+        dataCadastro = this.dataCadastro,
+        email = this.email,
+        senha = this.senha
     )
 }
