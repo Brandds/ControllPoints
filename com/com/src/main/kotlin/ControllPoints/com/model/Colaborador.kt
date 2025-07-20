@@ -17,6 +17,7 @@ class Colaborador(
     ativo: Boolean,
     cpf: String,
     telefone: String?,
+    listaRole : Set<Role> = mutableSetOf(),
 
     @ManyToOne(optional = false)
     var cargo: Cargo,
@@ -33,5 +34,5 @@ class Colaborador(
 
     var dataDesligamento: LocalDateTime?
 
-) : Usuario(id,nome, senha, email, login, empresa, ativo, cpf, telefone) {
+) : Usuario(id,nome, senha, email, login, empresa, ativo, cpf, telefone,listaRole) {
 }

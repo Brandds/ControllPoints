@@ -33,6 +33,7 @@ class GlobalExceptionHandler {
     // Excpetion para Não autorizado 401
     @ExceptionHandler(BadCredentialsException::class)
     fun handleBadCredentials(ex: BadCredentialsException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        logger.warn("BadCredentialsException: ${ex.message}");
         val error = ErrorResponse(
             status = HttpStatus.UNAUTHORIZED.value(),
             error = "Unauthorized",
@@ -84,6 +85,7 @@ class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception::class)
     fun handleGeneric(ex: Exception, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        print("Entrou no handleGeneric");
         logger.error("Erro inesperado: ", ex)
         val error = ErrorResponse(
             status = HttpStatus.INTERNAL_SERVER_ERROR.value(),
@@ -93,4 +95,16 @@ class GlobalExceptionHandler {
         )
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error)
     }
+    @ExceptionHandler(NullPointerException::class)
+    fun handleNullPointer(ex: NullPointerException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        logger.error("NullPointerException: ", ex)
+        val error = ErrorResponse(
+            status = HttpStatus.BAD_REQUEST.value(),
+            error = "Bad Request",
+            message = "Dados ausentes ou inválidos",
+            path = request.requestURI
+        )
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error)
+    }
+
 }

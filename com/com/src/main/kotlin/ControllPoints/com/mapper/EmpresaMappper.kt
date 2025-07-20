@@ -37,6 +37,7 @@ fun EmpresaDTO.toEntity() : Empresa {
         telefone = this.telefone,
         dataCadastro = this.dataCadastro,
         email = this.email,
-        senha = this.senha
+        senha = this.senha,
+        id = this.id
     )
 }

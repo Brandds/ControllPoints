@@ -19,6 +19,7 @@ fun ColaboradorCreateDTO.toEntityCreate() : Colaborador {
         horarioTrabalho = this.horarioTrabalhoDTO.toEntity(),
         dataContratacao = this.dataContratacao,
         dataDesligamento = this.dataDesligamento,
+        listaRole = this.listaRole
     )
 }
 

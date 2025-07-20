@@ -27,7 +27,7 @@ class ColaboradorController(
     }
 
     @Operation(summary = "Cadastra entidade/Não mais utilizados", description = "Não mais utilizados")
-    @PostMapping("/cadastrar")
+    @PostMapping("/cadastrarColaborador")
      fun cadastroColaborador(@RequestBody dto: ColaboradorCreateDTO): ResponseEntity<ColaboradorDTO> {
         val colaboradorSalvoDto =  colaoradorservice.cadastrar(dto);
 

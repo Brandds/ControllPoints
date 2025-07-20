@@ -1,6 +1,7 @@
 package ControllPoints.com.Security.config
 
 
+import ControllPoints.com.Security.Jwt.CustomAccessDeniedHandler
 import ControllPoints.com.Security.Jwt.UserAuthenticationFilter
 import ControllPoints.com.Security.exception.CustomAuthenticationEntryPoint
 import io.swagger.v3.oas.annotations.OpenAPIDefinition
@@ -29,23 +30,10 @@ import org.springframework.http.HttpMethod
 
 @Configuration
 @EnableWebSecurity
-@OpenAPIDefinition(
-    info = Info(
-        title = "Controll Points API",
-        version = "1.0",
-        description = "Documentação dos endpoints da API do sistema de ponto."
-    ),
-    security = [SecurityRequirement(name = "bearerAuth")]
-)
-@SecurityScheme(
-    name = "bearerAuth", // Um nome de referência para este esquema
-    type = SecuritySchemeType.HTTP, // O tipo de esquema é HTTP
-    scheme = "bearer", // O protocolo específico é o "Bearer Token"
-    bearerFormat = "JWT" // Um hint para o formato do token
-)
 class SecurityConfig(
     private val userAuthenticationFilter: UserAuthenticationFilter,
     private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
+    private val customAccessDeniedHandler: CustomAccessDeniedHandler,
     @Value("\${meu-app.links.localhost}") private val linkLocalhost: String
 
 ) {
@@ -55,6 +43,7 @@ class SecurityConfig(
          val ENDPOINTS_PUBLICOS = arrayOf(
              "/auth/login",
              "/colaboradores",
+             "/colaboradores/cadastrarColaborador",
              "/empresa/cadastrar",
              // Endpoints do Swagger/OpenAPI
              "/swagger-ui.html",
@@ -95,6 +84,8 @@ class SecurityConfig(
             }
             .exceptionHandling {
                 it.authenticationEntryPoint(customAuthenticationEntryPoint)
+                it.accessDeniedHandler(customAccessDeniedHandler)
+
             }
             .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
@@ -107,10 +98,6 @@ class SecurityConfig(
         return authenticationConfiguration.authenticationManager
     }
 
-    @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return BCryptPasswordEncoder()
-    }
     @Bean
     fun corsConfigurationSource(): CorsConfigurationSource {
 

@@ -22,11 +22,6 @@ class ColaboradorServiceImpl(
 ) : BaseServiceImpl<Colaborador, ColaboradorDTO>(repositoryColaborador), ColaboradorService {
 
     override fun salvar(dto: ColaboradorDTO): ColaboradorDTO {
-//        val senhaHasheada = passwordEncoder.encode(dto.senha);
-//        dto.senha = senhaHasheada;
-//        val newEntity = dto.toEntityCreate();
-//        repositoryColaborador.save(newEntity);
-//        return newEntity.toDTO();
         throw NotImplementedError("Este método deve ser implementado pelo serviço concreto.")
 
     }
@@ -88,6 +83,8 @@ class ColaboradorServiceImpl(
     override fun cadastrar(dto: ColaboradorCreateDTO): ColaboradorDTO {
         if(existColaborador(dto.email))
             throw RecursoJaExistenteException("O e-mail '${dto.email}' já está em uso.")
+        val senhaHasheada = passwordEncoder.encode(dto.senha);
+        dto.senha = senhaHasheada;
         val newEntityColaborador = dto.toEntityCreate();
         repositoryColaborador.save(newEntityColaborador)
 

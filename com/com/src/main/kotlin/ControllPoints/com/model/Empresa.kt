@@ -16,6 +16,7 @@ import java.time.LocalDate
 
 @Entity
 class Empresa (
+    id : Long? = null,
     val cnpj: String,
     val razaoSocial : String,
     val nomeFantasia : String,
@@ -39,5 +40,5 @@ class Empresa (
 
 //    @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 //    val listaCargo : List<Cargo> = listOf<Cargo>()
-): BaseEntity() {
+): BaseEntity(id) {
 }

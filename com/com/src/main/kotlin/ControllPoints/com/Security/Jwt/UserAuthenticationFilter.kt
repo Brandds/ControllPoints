@@ -26,31 +26,57 @@ class UserAuthenticationFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        if (checkIfEndpointIsNotPublic(request)) {
-            // Tenta recuperar o token a partir do cabeçalho
-            val token = recoveryToken(request)
+        try {
+            if (checkIfEndpointIsNotPublic(request)) {
+                val token = recoveryToken(request)
 
-            // Se o token existir, processa a autenticação
-            token?.let {
-                val subject = jwtTokenService.getSubjectFromToken(it)
-                val user = colaboradorRepository.findByEmail(subject)
-                    .orElseThrow { RuntimeException("Usuário não encontrado a partir do token.") }
+                if (!token.isNullOrBlank()) {
+                    try {
+                        val subject = jwtTokenService.getSubjectFromToken(token)
+                        val user = colaboradorRepository.findByEmail(subject)
+                            .orElseThrow { RuntimeException("Usuário não encontrado a partir do token.") }
 
-                val userDetails = UserDetailsImpl(user)
+                        val userDetails = UserDetailsImpl(user)
 
-                val authentication = UsernamePasswordAuthenticationToken(
-                    userDetails.username,
-                    null,
-                    userDetails.authorities
-                )
+                        val authentication = UsernamePasswordAuthenticationToken(
+                            userDetails.username,
+                            null,
+                            userDetails.authorities
+                        )
 
-                // 3. Define a autenticação no contexto de segurança (usando property access)
-                SecurityContextHolder.getContext().authentication = authentication
-            } ?: throw RuntimeException("O token está ausente ou mal formatado.")
+                        SecurityContextHolder.getContext().authentication = authentication
+
+                    } catch (ex: Exception) {
+                        logger.warn("Falha na validação do token JWT: ${ex.message}")
+                        // Não lança exceção aqui
+                    }
+                } else {
+                    logger.debug("Token ausente no header Authorization")
+                    // Não autentica, não lança exceção
+                }
+            }
+
+            filterChain.doFilter(request, response)
+
+        } catch (ex: Exception) {
+            // Só captura exceções inesperadas — idealmente não deve chegar aqui por erros de token
+            logger.error("Erro inesperado no filtro JWT: ", ex)
+            response.status = HttpServletResponse.SC_INTERNAL_SERVER_ERROR
+            response.contentType = "application/json"
+            response.writer.write(
+                """
+            {
+                "status": 500,
+                "error": "Internal Server Error",
+                "message": "${ex.message}"
+            }
+            """.trimIndent()
+            )
         }
-
-        filterChain.doFilter(request, response)
     }
+
+
+
 
     private fun recoveryToken(request: HttpServletRequest): String? {
         val authorizationHeader = request.getHeader("Authorization")

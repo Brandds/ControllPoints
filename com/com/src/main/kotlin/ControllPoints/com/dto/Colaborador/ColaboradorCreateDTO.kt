@@ -3,6 +3,7 @@ package ControllPoints.com.dto.Colaborador
 import ControllPoints.com.dto.CargoDTO
 import ControllPoints.com.dto.EmpresaDTO
 import ControllPoints.com.dto.HorarioTrabalhoDTO
+import ControllPoints.com.model.Role
 import java.time.LocalDateTime
 
 class ColaboradorCreateDTO(
@@ -17,6 +18,8 @@ class ColaboradorCreateDTO(
     val dataDesligamento: LocalDateTime? = null,
     var senha : String,
     val cargoDTO : CargoDTO,
-    val horarioTrabalhoDTO: HorarioTrabalhoDTO
+    val horarioTrabalhoDTO: HorarioTrabalhoDTO,
+    val listaRole : Set<Role> = mutableSetOf(),
+
     ) {
 }
