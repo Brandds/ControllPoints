@@ -1,5 +1,6 @@
 package ControllPoints.com.base
 
+import ControllPoints.com.exception.EntidadeNaoEncontradaException
 import org.springframework.data.jpa.repository.JpaRepository
 import java.time.LocalDateTime
 
@@ -21,7 +22,7 @@ abstract class BaseServiceImpl<T : BaseEntity, DTO>(
 
     override fun buscarPorId(id: Long): DTO {
         val entidade = repository.findById(id)
-            .orElseThrow { RuntimeException("Não foi possível localizar a entidade no sistema") }
+            .orElseThrow { EntidadeNaoEncontradaException("Não foi possível localizar a entidade no sistema") }
         return mapToDTO(entidade)
     }
 

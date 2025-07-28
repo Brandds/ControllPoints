@@ -106,4 +106,9 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error)
     }
 
+    @ExceptionHandler(EntidadeNaoEncontradaException::class)
+    fun handleEntidadeNaoEncontrada(ex: EntidadeNaoEncontradaException): ResponseEntity<String> {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.message)
+    }
+
 }
