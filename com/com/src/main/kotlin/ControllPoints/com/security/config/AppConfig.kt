@@ -1,4 +1,4 @@
-package ControllPoints.com.Security.config
+package ControllPoints.com.security.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

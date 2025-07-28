@@ -1,8 +1,7 @@
-package ControllPoints.com.Security.service
+package ControllPoints.com.security.service
 
 import ControllPoints.com.model.Colaborador
 import ControllPoints.com.model.Empresa
-import ControllPoints.com.model.Usuario
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails

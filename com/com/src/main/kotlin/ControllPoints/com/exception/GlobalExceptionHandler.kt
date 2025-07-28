@@ -1,4 +1,4 @@
-package controllpoints.exception
+package Controllpoints.exception
 
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory

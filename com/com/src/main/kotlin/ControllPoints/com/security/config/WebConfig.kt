@@ -1,11 +1,6 @@
-package ControllPoints.com.Security.config
+package ControllPoints.com.security.config
 
 
-import ControllPoints.com.Security.Jwt.CustomAccessDeniedHandler
-import ControllPoints.com.Security.Jwt.UserAuthenticationFilter
-import ControllPoints.com.Security.exception.CustomAuthenticationEntryPoint
-import io.swagger.v3.oas.annotations.OpenAPIDefinition
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest
 import org.springframework.context.annotation.Bean
@@ -15,25 +10,16 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
-import io.swagger.v3.oas.annotations.info.Info
-import io.swagger.v3.oas.annotations.security.SecurityRequirement
-import io.swagger.v3.oas.annotations.security.SecurityScheme
 import org.springframework.http.HttpMethod
 
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
-    private val userAuthenticationFilter: UserAuthenticationFilter,
-    private val customAuthenticationEntryPoint: CustomAuthenticationEntryPoint,
-    private val customAccessDeniedHandler: CustomAccessDeniedHandler,
     @Value("\${meu-app.links.localhost}") private val linkLocalhost: String
 
 ) {
@@ -78,16 +64,10 @@ class SecurityConfig(
 
                     .requestMatchers(PathRequest.toH2Console()).permitAll()
                     .requestMatchers(*ENDPOINTS_PUBLICOS).permitAll()
-                    .requestMatchers(*ENDPOINTS_ADMIN).hasRole("ADMINISTRATOR")
-                    .requestMatchers(*ENDPOINTS_CLIENTE).hasRole("CUSTOMER")
-                    .anyRequest().authenticated()
+                    .requestMatchers(*ENDPOINTS_ADMIN).permitAll()
+                    .requestMatchers(*ENDPOINTS_CLIENTE).permitAll()
+                    .anyRequest().permitAll()
             }
-            .exceptionHandling {
-                it.authenticationEntryPoint(customAuthenticationEntryPoint)
-                it.accessDeniedHandler(customAccessDeniedHandler)
-
-            }
-            .addFilterBefore(userAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
 
         return http.build()
     }
