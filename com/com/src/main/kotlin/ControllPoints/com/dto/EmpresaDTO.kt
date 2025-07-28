@@ -9,7 +9,7 @@ class EmpresaDTO(
     val razaoSocial: String,
     val nomeFantasia :String,
     val telefone : String,
-    val dataCadastro : LocalDate,
+    val dataCadastro : LocalDate?,
     var listaColaboradorDTO: List<ColaboradorDTO>? = listOf<ColaboradorDTO>(),
     val enderecoDTO: EnderecoDTO? = null,
     val senha : String,

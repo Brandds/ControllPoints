@@ -25,7 +25,7 @@ class Empresa (
     @JoinColumn(name = "endereco_id")
     val endereco : Endereco? = null,
     val telefone : String,
-    val dataCadastro : LocalDate,
+    val dataCadastro : LocalDate?,
 
     @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
     val listaColaborador: List<Colaborador> = listOf<Colaborador>(),
