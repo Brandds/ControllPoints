@@ -1,0 +1,12 @@
+{
+  "id": 0,
+  "cnpj": "12345678000100",
+  "razaoSocial": "Tech Solutions LTDA",
+  "nomeFantasia": "TechSol",
+  "telefone": "(11) 91234-5678",
+  "dataCadastro": "2025-07-28",
+  "enderecoDTO": null,
+  "senha": "senhaSegura123!",
+  "email": "contato@techsol.com.br",
+  "listaColaboradorDTO": null
+}

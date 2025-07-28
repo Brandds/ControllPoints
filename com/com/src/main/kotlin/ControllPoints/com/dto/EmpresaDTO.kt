@@ -10,9 +10,9 @@ class EmpresaDTO(
     val nomeFantasia :String,
     val telefone : String,
     val dataCadastro : LocalDate?,
-    var listaColaboradorDTO: List<ColaboradorDTO>? = listOf<ColaboradorDTO>(),
     val enderecoDTO: EnderecoDTO? = null,
     val senha : String,
     val email : String
 ):  BaseDTO(id){
+    var listaColaboradorDTO: List<ColaboradorDTO>? = listOf<ColaboradorDTO>()
 }
