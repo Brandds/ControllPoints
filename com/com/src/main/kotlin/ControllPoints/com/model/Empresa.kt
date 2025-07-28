@@ -18,25 +18,26 @@ import java.time.LocalDate
 class Empresa (
     id : Long? = null,
     val cnpj: String,
-    val razaoSocial : String,
-    val nomeFantasia : String,
+    var razaoSocial : String,
+    var nomeFantasia : String,
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "endereco_id")
-    val endereco : Endereco? = null,
-    val telefone : String,
-    val dataCadastro : LocalDate,
+    var endereco : Endereco? = null,
+    var telefone : String,
+    val dataCadastro : LocalDate?,
 
     @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    val listaColaborador: List<Colaborador> = listOf<Colaborador>(),
+    var listaColaborador: MutableList<Colaborador> = mutableListOf(),
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "empresa_roles",
         joinColumns = [JoinColumn(name = "empresa_id")],
         inverseJoinColumns = [JoinColumn(name = "role_id")])
-    val listaRole: Set<Role> = mutableSetOf(),
-    val senha : String,
-    val email : String
+    var listaRole: MutableSet<Role> = mutableSetOf(),
+
+    var senha : String,
+    var email : String
 
 //    @OneToMany(mappedBy = "empresa", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
 //    val listaCargo : List<Cargo> = listOf<Cargo>()
