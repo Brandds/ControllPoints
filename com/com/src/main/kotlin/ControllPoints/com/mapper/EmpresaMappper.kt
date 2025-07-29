@@ -41,3 +41,7 @@ fun EmpresaDTO.toEntity() : Empresa {
         id = this.id
     )
 }
+
+//fun EmpresaDTO.toUpdate() : Empresa {
+//    return new Empresa();
+//}

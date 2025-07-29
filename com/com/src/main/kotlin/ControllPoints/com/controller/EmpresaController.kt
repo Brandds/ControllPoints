@@ -16,9 +16,15 @@ class EmpresaController(
     private val empresaService : EmpresaServiceImpl
 ) : BaseCrudController<Empresa, EmpresaDTO>(empresaService) {
 
-    @Operation(summary = "Cadastra entidade", description = "Cadastrar a entidade em sua devida tabela")
-    @PostMapping("/cadastrar")
+    @Operation(summary = "Não utilizado", description = "Cadastrar a entidade em sua devida tabela")
+    @PostMapping("/cadastroNot")
     override fun salvar(@RequestBody dto: EmpresaDTO): EmpresaDTO {
         return empresaService.salvar(dto);
+    }
+
+    @Operation(summary = "Cadastra entidade consulta receita", description = "Cadastrar a entidade em sua devida tabela")
+    @PostMapping("/create")
+    suspend fun create(@RequestBody dto: EmpresaDTO): EmpresaDTO {
+        return empresaService.create(dto);
     }
 }
