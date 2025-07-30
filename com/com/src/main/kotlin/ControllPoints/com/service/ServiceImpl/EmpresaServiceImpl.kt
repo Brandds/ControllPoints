@@ -38,14 +38,11 @@ class EmpresaServiceImpl(
         return entity.toDTO();
     }
 
-    override suspend fun create(dto: EmpresaDTO): EmpresaDTO {
-        val consultaReceita = receitaWsServiceImpl.buscarEmpresaPorCnpj(dto.cnpj)
+    override suspend fun buscaCNPJ(cnpj: String): ReceitaWSResponse?{
+        val consultaReceita = receitaWsServiceImpl.buscarEmpresaPorCnpj(cnpj)
         if(consultaReceita == null)
             throw IllegalArgumentException("Cpnj invalido, não encontrado na base!")
 
-        print(consultaReceita.toString())
-        val entity = dto.toEntityCreate()
-        repository.save(entity)
-        return entity.toDTO()
+        return consultaReceita
     }
 }

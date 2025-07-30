@@ -29,10 +29,13 @@ INSERT INTO empresa (
       '(31) 91234-5678'
   );
 
-insert into cargo (nome) values ('capinteiro'),('analista de sistemas'),
-                                                   ('gerente de projetos'),
-                                                   ('desenvolvedor backend'),
-                                                   ('auxiliar administrativo');
+insert into cargo (nome, ativo) values
+('capinteiro', true),
+('analista de sistemas', true),
+('gerente de projetos', true),
+('desenvolvedor backend', true),
+('auxiliar administrativo', true);
+
 
 INSERT INTO horario_trabalho (
     id, created_at, updated_at

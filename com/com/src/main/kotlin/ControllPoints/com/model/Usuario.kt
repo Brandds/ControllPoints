@@ -32,14 +32,7 @@ abstract class Usuario (
     @Column(unique=true)
     val cpf: String,
 
-    var telefone: String?,
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "users_roles",
-        joinColumns =  [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name= "role_id")])
-    val listaRole : Set<Role> = mutableSetOf()
-
+    var telefone: String?
 ) : BaseEntity(id) {
 
 }

@@ -13,7 +13,7 @@ class UserDetailsImpl private constructor(
 
     constructor(colaborador: Colaborador) : this(
         colaborador,
-        colaborador.listaRole.map { SimpleGrantedAuthority("ROLE_" + it.name.name) }
+        colaborador.cargo.listaRole.map { SimpleGrantedAuthority("ROLE_" + it.name.name) }
     )
 
     constructor(empresa: Empresa) : this(

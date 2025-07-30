@@ -2,9 +2,11 @@ package ControllPoints.com.controller
 
 import ControllPoints.com.base.BaseCrudController
 import ControllPoints.com.dto.EmpresaDTO
+import ControllPoints.com.integracoes.ReceitaWSResponse
 import ControllPoints.com.model.Empresa
 import ControllPoints.com.service.ServiceImpl.EmpresaServiceImpl
 import io.swagger.v3.oas.annotations.Operation
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -23,8 +25,8 @@ class EmpresaController(
     }
 
     @Operation(summary = "Cadastra entidade consulta receita", description = "Cadastrar a entidade em sua devida tabela")
-    @PostMapping("/create")
-    suspend fun create(@RequestBody dto: EmpresaDTO): EmpresaDTO {
-        return empresaService.create(dto);
+    @PostMapping("/buscaCNPJ/{cnpj}")
+    suspend fun create(@PathVariable cnpj : String): ReceitaWSResponse? {
+        return empresaService.buscaCNPJ(cnpj);
     }
 }

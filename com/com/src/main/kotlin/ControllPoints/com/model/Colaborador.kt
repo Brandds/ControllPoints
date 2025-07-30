@@ -34,5 +34,5 @@ class Colaborador(
 
     var dataDesligamento: LocalDateTime?
 
-) : Usuario(id,nome, senha, email, login, empresa, ativo, cpf, telefone,listaRole) {
+) : Usuario(id,nome, senha, email, login, empresa, ativo, cpf, telefone) {
 }
