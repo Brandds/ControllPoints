@@ -24,24 +24,22 @@ private fun mapCampos(dto: EmpresaDTO, empresa: Empresa) {
 
 
 fun EmpresaDTO.toEntityCreate(): Empresa {
-    return Empresa(
-        id = null,
-        cnpj = this.cnpj,
-        razaoSocial = this.razaoSocial,
-        nomeFantasia = this.nomeFantasia,
-        tipo = this.tipo,
-        naturezaJuridica = this.naturezaJuridica,
-        abertura = this.abertura,
-        situacaoEmpresa = this.situacaoEmpresa,
-        capitalSocial = this.capitalSocial,
-        senha = this.senha,
-        email = this.email,
-        telefone = this.telefone,
-        dataCadastro = LocalDate.now(),
-        endereco = this.enderecoDTO?.toEntity(),
-        listaRole = this.listaRole
-    )
+    return Empresa().apply {
+        capitalSocial = this@toEntityCreate.capitalSocial
+        cnpj = this@toEntityCreate.cnpj
+        razaoSocial = this@toEntityCreate.razaoSocial
+        nomeFantasia = this@toEntityCreate.nomeFantasia
+        tipo = this@toEntityCreate.tipo
+        naturezaJuridica = this@toEntityCreate.naturezaJuridica
+        situacaoEmpresa = this@toEntityCreate.situacaoEmpresa
+        senha = this@toEntityCreate.senha
+        email = this@toEntityCreate.email
+        telefone = this@toEntityCreate.telefone
+        dataCadastro = this@toEntityCreate.dataCadastro
+        listaRole = this@toEntityCreate.listaRole
+    }
 }
+
 
 
 
