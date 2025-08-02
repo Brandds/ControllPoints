@@ -75,20 +75,26 @@ class ColaboradorServiceImpl(
         )
     }
 
-
-    override fun antesDeAtualizar(entity: Colaborador, dto: ColaboradorDTO): Colaborador {
+    override fun antesDeAtualizar(
+        entity: Colaborador,
+        dto: ColaboradorDTO
+    ): Colaborador {
         TODO("Not yet implemented")
     }
 
-    override fun cadastrar(dto: ColaboradorCreateDTO): ColaboradorDTO {
-        if(existColaborador(dto.email))
-            throw RecursoJaExistenteException("O e-mail '${dto.email}' já está em uso.")
-        val senhaHasheada = passwordEncoder.encode(dto.senha);
-        dto.senha = senhaHasheada;
-        val newEntityColaborador = dto.toEntityCreate();
-        repositoryColaborador.save(newEntityColaborador)
 
-        return newEntityColaborador.toDTO();
+    override fun antesDeSalvar(dto: ColaboradorDTO): ColaboradorDTO {
+        val existente = repositoryColaborador.findByEmail(dto.email)
+
+        if (existente != null && existente.id != dto.id) {
+            throw RecursoJaExistenteException("O e-mail '${dto.email}' já está em uso.")
+        }
+
+        if (!dto.senha.isNullOrBlank()) {
+            dto.senha = passwordEncoder.encode(dto.senha)
+        }
+
+        return dto
     }
 
     private fun existColaborador(email : String) : Boolean {
