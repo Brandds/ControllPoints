@@ -1,22 +1,31 @@
 package ControllPoints.com.model
 
 import ControllPoints.com.base.BaseEntity
-import jakarta.persistence.Entity
-import jakarta.persistence.FetchType
-import jakarta.persistence.JoinColumn
-import jakarta.persistence.JoinTable
-import jakarta.persistence.ManyToMany
-import jakarta.persistence.ManyToOne
+import jakarta.persistence.*
 import java.math.BigDecimal
 
 @Entity
 class Cargo(
     id: Long? = null,
+
+    @Column
     var nome :String,
+
+    @Column(length = 500)
     var descricao: String? = null,
+
+    @Column
     var nivel: Int? = null,
+
+    @Column
     var salarioBase: BigDecimal? = null,
+
+    @Column
+    salarioHoraRef: BigDecimal? = null,
+
+    @Column
     var ativo: Boolean = true,
+
 
     @ManyToOne
     @JoinColumn(name = "empresa_id")
@@ -27,5 +36,8 @@ class Cargo(
         joinColumns =  [JoinColumn(name = "cargo_id")],
         inverseJoinColumns = [JoinColumn(name= "role_id")])
     val listaRole : Set<Role> = mutableSetOf()
+
+    @OneToMany(mappedBy = "cargo", cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
+    var listaColaboradoresCargo: List<CargoColaborador> = listOf()
 ): BaseEntity(id) {
 }
