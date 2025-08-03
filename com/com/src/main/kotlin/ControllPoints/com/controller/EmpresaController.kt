@@ -24,9 +24,9 @@ class EmpresaController(
         return empresaService.salvar(dto);
     }
 
-    @Operation(summary = "Cadastra entidade consulta receita", description = "Cadastrar a entidade em sua devida tabela")
+    @Operation(summary = "Busca empresa", description = "Busca empresa pelo CNPJ")
     @PostMapping("/buscaCNPJ/{cnpj}")
-    suspend fun create(@PathVariable cnpj : String): ReceitaWSResponse? {
+    suspend fun buscaCNPJ(@PathVariable cnpj : String): ReceitaWSResponse? {
         return empresaService.buscaCNPJ(cnpj);
     }
 }

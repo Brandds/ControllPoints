@@ -9,8 +9,10 @@ import ControllPoints.com.mapper.toDTO
 import ControllPoints.com.model.Empresa
 import ControllPoints.com.repository.EmpresaRepository
 import ControllPoints.com.service.EmpresaService
+import org.springframework.http.HttpStatus
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
+import org.springframework.web.server.ResponseStatusException
 
 @Service
 class EmpresaServiceImpl(
@@ -40,8 +42,8 @@ class EmpresaServiceImpl(
 
     override suspend fun buscaCNPJ(cnpj: String): ReceitaWSResponse?{
         val consultaReceita = receitaWsServiceImpl.buscarEmpresaPorCnpj(cnpj)
-        if(consultaReceita == null)
-            throw IllegalArgumentException("Cpnj invalido, não encontrado na base!")
+        if(consultaReceita == null )
+            throw ResponseStatusException(HttpStatus.BAD_REQUEST, "CNPJ inválido, não encontrado na base!")
 
         return consultaReceita
     }

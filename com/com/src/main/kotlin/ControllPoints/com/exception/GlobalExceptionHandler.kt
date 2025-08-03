@@ -3,13 +3,16 @@ package Controllpoints.exception
 import jakarta.servlet.http.HttpServletRequest
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpStatus
+import org.springframework.http.HttpStatusCode
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.validation.FieldError
 import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.server.ResponseStatusException
 import java.time.LocalDateTime
+
 
 data class ErrorResponse(
     val timestamp: LocalDateTime = LocalDateTime.now(),
@@ -105,6 +108,25 @@ class GlobalExceptionHandler {
             path = request.requestURI
         )
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error)
+    }
+
+    @ExceptionHandler(ResponseStatusException::class)
+    fun handleResponseStatus(ex: ResponseStatusException, request: HttpServletRequest): ResponseEntity<ErrorResponse> {
+        val status = ex.statusCode
+        // de "400 BAD_REQUEST" pega "BAD_REQUEST" e formata para "Bad request"
+        val raw = status.toString().split(" ", limit = 2).getOrNull(1) ?: status.value().toString()
+        val errorName = raw
+            .lowercase()
+            .replace('_', ' ')
+            .replaceFirstChar { it.uppercase() }
+
+        val error = ErrorResponse(
+            status = status.value(),
+            error = errorName,
+            message = ex.reason ?: "Erro de requisição",
+            path = request.requestURI
+        )
+        return ResponseEntity.status(status).body(error)
     }
 
 }

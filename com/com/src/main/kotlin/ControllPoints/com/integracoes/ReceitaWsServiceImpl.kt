@@ -1,7 +1,9 @@
 package ControllPoints.com.integracoes
 
+import ControllPoints.com.mapper.isAllNull
 import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.WebClient
+import reactor.core.publisher.Mono
 
 
 data class ReceitaWSResponse(
@@ -36,7 +38,13 @@ class ReceitaWsServiceImpl {
         return webClient.get()
             .uri("/cnpj/$cnpj")
             .retrieve()
+            .onStatus({ status -> status.is4xxClientError || status.is5xxServerError }) { resp ->
+                Mono.error(IllegalArgumentException("Erro na requisição: ${resp.statusCode()}"))
+            }
             .bodyToMono(ReceitaWSResponse::class.java)
-            .block()
+            .blockOptional()
+            .filter { !it.isAllNull() }
+            .orElse(null)
     }
+
 }
